@@ -4,6 +4,11 @@ All notable updates and releases for **Miss Roses Exquisite** are documented her
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.1] - 2026-10-28
+### GitHub Production Deployment
+- Initialized and deployed the complete production codebase and assets to GitHub: `https://github.com/titusackey/Miss-Rosses-Exquisite-`.
+- Included storefront, admin dashboard, persistent database layer, documentation, and `.gitignore`.
+
 ## [1.0.0] - 2026-10-12
 ### Completed Implementation of Entire Website & Backlog
 - **E-Commerce Storefront (`website/public/index.html`, `style.css`, `app.js`):**
