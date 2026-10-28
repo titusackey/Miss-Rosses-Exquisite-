@@ -414,21 +414,146 @@ async function loadProducts() {
 
     tbody.innerHTML = currentProducts.map(p => `
       <tr>
-        <td><img src="${p.image_url}" style="width:50px; height:58px; object-fit:cover; border-radius:4px;"></td>
-        <td><strong>${p.name}</strong></td>
+        <td>
+          <div style="position:relative; width:50px; height:58px; display:inline-block;">
+            <img src="${p.image_url}" style="width:50px; height:58px; object-fit:cover; border-radius:4px;">
+            ${p.video_url ? `<span title="Has Video" style="position:absolute; bottom:2px; right:2px; background:rgba(0,0,0,0.75); color:#fff; font-size:0.6rem; padding:1px 3px; border-radius:2px;"><i class="fa-solid fa-play"></i></span>` : ''}
+          </div>
+        </td>
+        <td>
+          <strong>${p.name}</strong>
+          ${p.video_url ? `<div style="font-size:0.75rem; color:#4a90e2; margin-top:2px;"><i class="fa-solid fa-video"></i> Video Included</div>` : ''}
+        </td>
         <td>${p.category_name}</td>
         <td><strong>GHS ${p.price.toFixed(2)}</strong></td>
         <td>${p.total_stock} in stock</td>
         <td>${p.badge ? `<span style="background:#eee; padding:2px 8px; border-radius:3px; font-size:0.75rem; font-weight:600;">${p.badge}</span>` : '-'}</td>
         <td>
-          <button onclick="editProduct(${p.id})" class="btn btn-sm" style="padding:5px 9px; font-size:0.8rem; border:1px solid #ccc; background:#fff;"><i class="fa-solid fa-pen"></i></button>
-          <button onclick="deleteProduct(${p.id})" class="btn btn-sm" style="padding:5px 9px; font-size:0.8rem; border:1px solid #c93b3b; color:#c93b3b; background:#fff;"><i class="fa-solid fa-trash"></i></button>
+          <button onclick="editProduct(${p.id})" class="btn btn-sm" style="padding:5px 9px; font-size:0.8rem; border:1px solid #ccc; background:#fff;" title="Edit piece"><i class="fa-solid fa-pen"></i></button>
+          <button onclick="deleteProduct(${p.id})" class="btn btn-sm" style="padding:5px 9px; font-size:0.8rem; border:1px solid #c93b3b; color:#c93b3b; background:#fff;" title="Delete piece"><i class="fa-solid fa-trash"></i></button>
         </td>
       </tr>
     `).join('');
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="7" style="color:red; text-align:center;">Failed to load products.</td></tr>`;
   }
+}
+
+// Media upload helpers for phone and PC
+function toggleImageUrlManual() {
+  const box = document.getElementById('manualImageUrlBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleVideoUrlManual() {
+  const box = document.getElementById('manualVideoUrlBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function handleManualImageUrl(url) {
+  const container = document.getElementById('imagePreviewContainer');
+  const img = document.getElementById('imagePreviewEl');
+  if (url && url.trim()) {
+    img.src = url.trim();
+    container.style.display = 'block';
+    document.getElementById('editProdImageData').value = url.trim();
+  } else {
+    container.style.display = 'none';
+    document.getElementById('editProdImageData').value = '';
+  }
+}
+
+function handleManualVideoUrl(url) {
+  const container = document.getElementById('videoPreviewContainer');
+  const video = document.getElementById('videoPreviewEl');
+  if (url && url.trim()) {
+    video.src = url.trim();
+    container.style.display = 'block';
+    document.getElementById('editProdVideoData').value = url.trim();
+  } else {
+    container.style.display = 'none';
+    document.getElementById('editProdVideoData').value = '';
+  }
+}
+
+function clearImagePreview() {
+  document.getElementById('editProdImageFile').value = '';
+  document.getElementById('imagePreviewEl').src = '';
+  document.getElementById('imagePreviewContainer').style.display = 'none';
+  document.getElementById('editProdImageData').value = '';
+  document.getElementById('editProdImage').value = '';
+}
+
+function clearVideoPreview() {
+  document.getElementById('editProdVideoFile').value = '';
+  document.getElementById('videoPreviewEl').src = '';
+  document.getElementById('videoPreviewContainer').style.display = 'none';
+  document.getElementById('editProdVideoData').value = '';
+  if (document.getElementById('editProdVideo')) document.getElementById('editProdVideo').value = '';
+}
+
+function handleImageFileSelect(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const rawData = e.target.result;
+    
+    // Resize high-res camera photos on phone/PC so they load ultra-fast without lag
+    const img = new Image();
+    img.onload = function() {
+      const maxDim = 1200;
+      let width = img.width;
+      let height = img.height;
+      
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const compressedData = canvas.toDataURL('image/jpeg', 0.88);
+      document.getElementById('imagePreviewEl').src = compressedData;
+      document.getElementById('imagePreviewContainer').style.display = 'block';
+      document.getElementById('editProdImageData').value = compressedData;
+      document.getElementById('editProdImage').value = compressedData;
+    };
+    img.src = rawData;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleVideoFileSelect(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+
+  if (file.size > 25 * 1024 * 1024) {
+    alert('Notice: The selected video is larger than 25MB. For best performance, please choose a video under 25MB or paste a video link.');
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const videoData = e.target.result;
+    const previewEl = document.getElementById('videoPreviewEl');
+    previewEl.src = videoData;
+    document.getElementById('videoPreviewContainer').style.display = 'block';
+    document.getElementById('editProdVideoData').value = videoData;
+    if (document.getElementById('editProdVideo')) {
+      document.getElementById('editProdVideo').value = videoData;
+    }
+  };
+  reader.readAsDataURL(file);
 }
 
 function openNewProductModal() {
@@ -438,9 +563,12 @@ function openNewProductModal() {
   document.getElementById('editProdCategory').value = '1';
   document.getElementById('editProdPrice').value = '';
   document.getElementById('editProdComparePrice').value = '';
-  document.getElementById('editProdImage').value = '';
   document.getElementById('editProdDesc').value = '';
   document.getElementById('editProdBadge').value = '';
+  clearImagePreview();
+  clearVideoPreview();
+  document.getElementById('manualImageUrlBox').style.display = 'none';
+  document.getElementById('manualVideoUrlBox').style.display = 'none';
   document.getElementById('adminProductModal').classList.add('active');
 }
 
@@ -454,9 +582,29 @@ function editProduct(id) {
   document.getElementById('editProdCategory').value = p.category_id;
   document.getElementById('editProdPrice').value = p.price;
   document.getElementById('editProdComparePrice').value = p.compare_price || '';
-  document.getElementById('editProdImage').value = p.image_url;
   document.getElementById('editProdDesc').value = p.description;
   document.getElementById('editProdBadge').value = p.badge || '';
+
+  // Setup Image Preview
+  clearImagePreview();
+  if (p.image_url) {
+    document.getElementById('editProdImage').value = p.image_url;
+    document.getElementById('editProdImageData').value = p.image_url;
+    document.getElementById('imagePreviewEl').src = p.image_url;
+    document.getElementById('imagePreviewContainer').style.display = 'block';
+  }
+
+  // Setup Video Preview
+  clearVideoPreview();
+  if (p.video_url) {
+    if (document.getElementById('editProdVideo')) document.getElementById('editProdVideo').value = p.video_url;
+    document.getElementById('editProdVideoData').value = p.video_url;
+    document.getElementById('videoPreviewEl').src = p.video_url;
+    document.getElementById('videoPreviewContainer').style.display = 'block';
+  }
+
+  document.getElementById('manualImageUrlBox').style.display = 'none';
+  document.getElementById('manualVideoUrlBox').style.display = 'none';
   document.getElementById('adminProductModal').classList.add('active');
 }
 
@@ -467,12 +615,21 @@ function closeAdminProductModal() {
 async function handleProductSave(e) {
   e.preventDefault();
   const id = document.getElementById('editProdId').value;
+  const imageUrl = (document.getElementById('editProdImageData').value || document.getElementById('editProdImage').value).trim();
+  const videoUrl = (document.getElementById('editProdVideoData').value || (document.getElementById('editProdVideo') ? document.getElementById('editProdVideo').value : '')).trim();
+
+  if (!imageUrl) {
+    alert('Please choose a photo from your phone/PC or enter an image URL.');
+    return;
+  }
+
   const payload = {
     name: document.getElementById('editProdName').value.trim(),
     category_id: parseInt(document.getElementById('editProdCategory').value, 10),
     price: parseFloat(document.getElementById('editProdPrice').value),
     compare_price: document.getElementById('editProdComparePrice').value ? parseFloat(document.getElementById('editProdComparePrice').value) : null,
-    image_url: document.getElementById('editProdImage').value.trim(),
+    image_url: imageUrl,
+    video_url: videoUrl,
     description: document.getElementById('editProdDesc').value.trim(),
     badge: document.getElementById('editProdBadge').value.trim()
   };

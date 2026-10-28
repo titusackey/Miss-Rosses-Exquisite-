@@ -774,6 +774,61 @@ ul {
   border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
+.video-indicator-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(12, 12, 12, 0.82);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.video-indicator-badge i {
+  color: var(--gold-primary);
+  font-size: 0.65rem;
+}
+
+.media-toggle-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.media-tab-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  background: #fff;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.media-tab-btn:hover {
+  border-color: var(--gold-primary);
+}
+
+.media-tab-btn.active {
+  background: var(--noir-deep);
+  color: #fff;
+  border-color: var(--noir-deep);
+}
+
 .rating-badge {
   position: absolute;
   bottom: 12px;

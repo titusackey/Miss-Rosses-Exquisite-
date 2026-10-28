@@ -95,6 +95,7 @@ function renderProducts(products) {
       <div class="product-card">
         <div class="product-thumb">
           <img src="${prod.image_url}" alt="${prod.name}" loading="lazy">
+          ${prod.video_url ? `<span class="video-indicator-badge" title="Showcase Video Available"><i class="fa-solid fa-play"></i> Video</span>` : ''}
           ${prod.badge ? `<span class="product-badge">${prod.badge}</span>` : ''}
           <div class="rating-badge"><i class="fa-solid fa-star"></i> 5.0</div>
         </div>
@@ -209,7 +210,24 @@ function openProductDetails(prodId) {
   details.innerHTML = `
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: start;">
       <div>
-        <img src="${prod.image_url}" alt="${prod.name}" style="width: 100%; height: 420px; object-fit: cover; border-radius: var(--radius-md); box-shadow: var(--shadow-card);">
+        ${prod.video_url ? `
+          <div class="media-toggle-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <button type="button" class="media-tab-btn active" id="modalPhotoTabBtn" onclick="switchModalMedia('photo')">
+              <i class="fa-solid fa-image"></i> High-Res Photo
+            </button>
+            <button type="button" class="media-tab-btn" id="modalVideoTabBtn" onclick="switchModalMedia('video')">
+              <i class="fa-solid fa-play" style="color: #d4af37;"></i> Watch Video Clip
+            </button>
+          </div>
+          <div id="modalPhotoView">
+            <img src="${prod.image_url}" alt="${prod.name}" style="width: 100%; height: 420px; max-height: 55vh; object-fit: cover; border-radius: var(--radius-md); box-shadow: var(--shadow-card);">
+          </div>
+          <div id="modalVideoView" style="display: none;">
+            <video src="${prod.video_url}" controls autoplay loop playsinline style="width: 100%; height: 420px; max-height: 55vh; object-fit: cover; border-radius: var(--radius-md); box-shadow: var(--shadow-card); background: #000;"></video>
+          </div>
+        ` : `
+          <img src="${prod.image_url}" alt="${prod.name}" style="width: 100%; height: 420px; max-height: 55vh; object-fit: cover; border-radius: var(--radius-md); box-shadow: var(--shadow-card);">
+        `}
       </div>
       <div>
         <span class="product-category-tag">${prod.category_name}</span>
@@ -250,8 +268,39 @@ function openProductDetails(prodId) {
   modal.classList.add('active');
 }
 
+function switchModalMedia(type) {
+  const photoView = document.getElementById('modalPhotoView');
+  const videoView = document.getElementById('modalVideoView');
+  const photoBtn = document.getElementById('modalPhotoTabBtn');
+  const videoBtn = document.getElementById('modalVideoTabBtn');
+  if (type === 'video') {
+    if (photoView) photoView.style.display = 'none';
+    if (videoView) {
+      videoView.style.display = 'block';
+      const vid = videoView.querySelector('video');
+      if (vid) vid.play().catch(() => {});
+    }
+    if (photoBtn) photoBtn.classList.remove('active');
+    if (videoBtn) videoBtn.classList.add('active');
+  } else {
+    if (photoView) photoView.style.display = 'block';
+    if (videoView) {
+      videoView.style.display = 'none';
+      const vid = videoView.querySelector('video');
+      if (vid) vid.pause();
+    }
+    if (photoBtn) photoBtn.classList.add('active');
+    if (videoBtn) videoBtn.classList.remove('active');
+  }
+}
+
 function closeProductModal() {
-  document.getElementById('productModal').classList.remove('active');
+  const modal = document.getElementById('productModal');
+  if (modal) {
+    const vid = modal.querySelector('video');
+    if (vid) vid.pause();
+    modal.classList.remove('active');
+  }
 }
 
 function addToCartFromModal(prodId) {

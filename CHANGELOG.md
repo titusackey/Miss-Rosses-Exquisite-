@@ -4,6 +4,14 @@ All notable updates and releases for **Miss Roses Exquisite** are documented her
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.3] - 2026-10-28
+### Photo & Video Upload System for Super Admin (Phone & PC)
+- Added direct picture and video uploading directly from phones (Camera / Photo Library) and PC file explorers into the Super Admin management modal.
+- Integrated automated client-side canvas photo compression to keep high-res phone camera shots fast-loading and responsive.
+- Added live media preview players in the Admin portal for both photos and video clips with instant clear/remove controls.
+- Upgraded the Storefront product card and modal to display a luxury `[ ▶ Video ]` indicator badge and interactive tabs allowing customers to watch video clips and high-res photos side-by-side.
+- Added persistent `video_url` storage in the persistent database driver.
+
 ## [1.0.2] - 2026-10-28
 ### Mobile Optimization & Shop Location Update
 - Removed VIP complimentary delivery text from top banner and headers.
