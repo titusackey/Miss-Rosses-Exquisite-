@@ -4,6 +4,17 @@ All notable updates and releases for **Miss Roses Exquisite** are documented her
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.2] - 2026-10-28
+### Mobile Optimization & Shop Location Update
+- Removed VIP complimentary delivery text from top banner and headers.
+- Added physical boutique location (**Weija Old Barrier, Accra**) prominently in the top announcement bar, hero trust indicators, concierge direct contact channels, and footer.
+- Comprehensive mobile-friendly responsiveness:
+  - Responsive 2-column e-commerce grid on mobile phones with touch-friendly cards.
+  - Native touch-scrolling horizontal pills for category filtering.
+  - Full-width stacked form rows for effortless checkout typing on phones.
+  - Mobile cart drawer and chat drawer optimized with non-intrusive floating trigger.
+  - Auto-closing mobile navigation drawer upon link clicks.
+
 ## [1.0.1] - 2026-10-28
 ### GitHub Production Deployment
 - Initialized and deployed the complete production codebase and assets to GitHub: `https://github.com/titusackey/Miss-Rosses-Exquisite-`.

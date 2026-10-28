@@ -166,8 +166,25 @@ function handleSort() {
 // Mobile navigation
 function toggleMobileNav() {
   const nav = document.getElementById('mainNav');
-  nav.classList.toggle('mobile-open');
+  if (nav) nav.classList.toggle('mobile-open');
 }
+
+function closeMobileNav() {
+  const nav = document.getElementById('mainNav');
+  if (nav) nav.classList.remove('mobile-open');
+}
+
+// Auto-close mobile menu on link click
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.getElementById('mainNav');
+  if (nav) {
+    nav.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+        closeMobileNav();
+      }
+    });
+  }
+});
 
 // Scroll helpers
 function scrollToSocialHub() {
