@@ -8,12 +8,18 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DB_DIR = path.resolve(__dirname, '../../database');
-const DB_FILE = path.join(DB_DIR, 'miss_roses_exquisite.json');
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const BUNDLED_DB_FILE = path.resolve(__dirname, '../../database/miss_roses_exquisite.json');
+const DB_DIR = isServerless ? path.join('/tmp', 'database') : path.resolve(__dirname, '../../database');
+const DB_FILE = isServerless ? path.join(DB_DIR, 'miss_roses_exquisite.json') : BUNDLED_DB_FILE;
 const SCHEMA_FILE = path.join(DB_DIR, 'schema.sql');
 
-if (!fs.existsSync(DB_DIR)) {
-  fs.mkdirSync(DB_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(DB_DIR)) {
+    fs.mkdirSync(DB_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.warn('DB directory initialization note:', e.message);
 }
 
 // Initial state template
@@ -41,13 +47,23 @@ class PersistentDatabase {
   }
 
   init() {
-    if (!fs.existsSync(DB_FILE)) {
+    if (isServerless && !fs.existsSync(DB_FILE) && fs.existsSync(BUNDLED_DB_FILE)) {
+      try {
+        fs.copyFileSync(BUNDLED_DB_FILE, DB_FILE);
+      } catch (err) {
+        console.warn('Could not copy bundled DB to /tmp, will read or use initial:', err.message);
+      }
+    }
+
+    const sourceFile = fs.existsSync(DB_FILE) ? DB_FILE : (fs.existsSync(BUNDLED_DB_FILE) ? BUNDLED_DB_FILE : null);
+
+    if (!sourceFile) {
       this.data = JSON.parse(JSON.stringify(INITIAL_DB));
       this.persist();
       console.log('✅ Persistent Database created at:', DB_FILE);
     } else {
       try {
-        const raw = fs.readFileSync(DB_FILE, 'utf8');
+        const raw = fs.readFileSync(sourceFile, 'utf8');
         this.data = JSON.parse(raw);
         // Ensure collections exist
         if (!this.data.inquiries) this.data.inquiries = [];

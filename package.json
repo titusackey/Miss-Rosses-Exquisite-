@@ -1,0 +1,30 @@
+{
+  "name": "miss-roses-exquisite",
+  "version": "1.0.0",
+  "description": "Miss Roses Exquisite - Premium Dresses, Bangles, and Slippers E-Commerce Platform",
+  "main": "website/server.js",
+  "scripts": {
+    "start": "node website/server.js",
+    "dev": "node website/server.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "fashion",
+    "boutique",
+    "miss-roses-exquisite"
+  ],
+  "author": "Miss Roses Exquisite",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.18.1",
+    "helmet": "^8.3.0",
+    "joi": "^18.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.0"
+  }
+}
