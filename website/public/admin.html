@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Command Portal | Miss Roses Exquisite</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <style>
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+      background: #f4f6f9;
+    }
+    .admin-sidebar {
+      width: 280px;
+      background: var(--noir-deep);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    .admin-brand {
+      padding: 26px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .admin-menu {
+      padding: 20px 0;
+      flex: 1;
+    }
+    .admin-menu a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 28px;
+      color: #bbb;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .admin-menu a:hover,
+    .admin-menu a.active {
+      color: #fff;
+      background: rgba(212, 175, 55, 0.15);
+      border-left: 4px solid var(--gold-primary);
+    }
+    .admin-menu a i {
+      font-size: 1.1rem;
+      color: var(--gold-primary);
+    }
+    .badge-inq-count,
+    .badge-chat-alert {
+      margin-left: auto;
+      background: var(--gold-primary);
+      color: var(--noir-deep);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .badge-chat-alert {
+      background: #25d366;
+      color: #fff;
+    }
+    .admin-content {
+      flex: 1;
+      padding: 35px;
+      overflow-y: auto;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    /* Toast Notification Banner for incoming messages */
+    .admin-toast-banner {
+      background: linear-gradient(90deg, #111 0%, #25d366 100%);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      animation: pulseAlert 2s infinite;
+    }
+    @keyframes pulseAlert {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-bottom: 35px;
+    }
+    .stat-card {
+      background: #fff;
+      padding: 24px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .stat-val {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--noir-deep);
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      border: 1px solid var(--border-subtle);
+    }
+    .admin-table th,
+    .admin-table td {
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #edf0f2;
+    }
+    .admin-table th {
+      background: #fafbfc;
+      font-weight: 700;
+      color: #444;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+    .badge-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .badge-Pending { background: #fff3cd; color: #856404; }
+    .badge-Confirmed { background: #d1ecf1; color: #0c5460; }
+    .badge-OutForDelivery { background: #e2e3e5; color: #383d41; }
+    .badge-Delivered { background: #d4edda; color: #155724; }
+    .badge-Cancelled { background: #f8d7da; color: #721c24; }
+    .login-container {
+      max-width: 440px;
+      margin: 100px auto;
+      background: #fff;
+      padding: 45px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      border: 1px solid var(--border-subtle);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login View -->
+  <div id="loginView" class="login-container">
+    <div style="font-size: 2.5rem; margin-bottom: 12px;">🌸</div>
+    <h2 style="font-family: var(--font-cinzel); font-size: 2rem; margin-bottom: 6px;">Super Admin Portal</h2>
+    <p style="color: #666; font-size: 0.88rem; margin-bottom: 25px;">Miss Roses Exquisite Luxury Command Desk</p>
+
+    <div id="loginAlert" style="display: none; padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 18px;"></div>
+
+    <form onsubmit="handleAdminLogin(event)">
+      <div class="form-group" style="text-align: left;">
+        <label><i class="fa-solid fa-envelope"></i> Master Email</label>
+        <input type="email" id="adminEmail" class="form-control" required value="admin@missrosesexquisite.com">
+      </div>
+      <div class="form-group" style="text-align: left;">
+        <label><i class="fa-solid fa-lock"></i> Master Password</label>
+        <input type="password" id="adminPassword" class="form-control" required placeholder="Enter password (default: AdminRose2026!)">
+      </div>
+      <button type="submit" class="btn btn-gold btn-block btn-glow" style="margin-top: 20px;">
+        <i class="fa-solid fa-right-to-bracket"></i> Authenticate & Enter
+      </button>
+    </form>
+    <div style="margin-top: 25px;">
+      <a href="/" style="font-size: 0.85rem; color: #777;"><i class="fa-solid fa-arrow-left"></i> Return to Storefront</a>
+    </div>
+  </div>
+
+  <!-- Dashboard View -->
+  <div id="dashboardView" class="admin-layout" style="display: none;">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <span style="font-size: 1.8rem;">🌸</span>
+        <div>
+          <div style="font-family: var(--font-cinzel); font-size: 1.3rem; font-weight: 700;">Miss Roses</div>
+          <div style="font-size: 0.68rem; color: var(--gold-primary); letter-spacing: 2px;">SUPER ADMIN</div>
+        </div>
+      </div>
+      <nav class="admin-menu">
+        <a class="active" onclick="showTab('orders', this)"><i class="fa-solid fa-receipt"></i> Orders & Deliveries</a>
+        <a onclick="showTab('livechat', this)"><i class="fa-solid fa-comments"></i> On-Site Live Chats <span id="chatAlertBadge" class="badge-chat-alert" style="display:none;">NEW</span></a>
+        <a onclick="showTab('inquiries', this)"><i class="fa-solid fa-envelope-open-text"></i> Client Inquiries <span id="inquiryBadgeCount" class="badge-inq-count" style="display:none;">0</span></a>
+        <a onclick="showTab('products', this)"><i class="fa-solid fa-boxes-stacked"></i> Catalogue Management</a>
+        <a onclick="showTab('inventory', this)"><i class="fa-solid fa-warehouse"></i> Inventory & Stock</a>
+        <a onclick="showTab('reports', this)"><i class="fa-solid fa-chart-line"></i> Sales Analytics</a>
+        <a onclick="showTab('notifications', this)"><i class="fa-solid fa-paper-plane"></i> Dispatch Log</a>
+        <a onclick="showTab('backup', this)"><i class="fa-solid fa-database"></i> Database & Backups</a>
+      </nav>
+      <div style="padding: 20px 24px; border-top: 1px solid rgba(255,255,255,0.08);">
+        <button class="btn btn-sm btn-outline-gold btn-block" onclick="adminLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <main class="admin-content">
+      <!-- Live Message Alert Banner -->
+      <div id="adminLiveChatToast" class="admin-toast-banner" style="display: none;">
+        <div>
+          <strong><i class="fa-solid fa-bell"></i> New Customer Message Received!</strong>
+          <span id="toastChatPreview" style="margin-left: 10px; font-size: 0.9rem;"></span>
+        </div>
+        <button onclick="showTab('livechat'); dismissToast();" class="btn btn-sm btn-gold" style="padding: 4px 14px; font-size: 0.8rem;">
+          Open Chat Desk <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="admin-header">
+        <div>
+          <h1 id="tabTitle" style="font-family: var(--font-cinzel); font-size: 2.3rem;">Orders & Deliveries</h1>
+          <p style="color: #666; font-size: 0.9rem;" id="tabDesc">Manage live orders and update customer fulfillment statuses</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <a href="/" target="_blank" class="btn btn-sm btn-outline-dark">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Store
+          </a>
+        </div>
+      </div>
+
+      <!-- Real-Time Metrics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+          <div>
+            <div class="stat-val" id="statRevenue">GHS 0.00</div>
+            <div class="stat-label">Total Revenue</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+          <div>
+            <div class="stat-val" id="statOrders">0</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+          <div>
+            <div class="stat-val" id="statChats">0</div>
+            <div class="stat-label">Active Chats</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <div class="stat-val" id="statInquiries">0</div>
+            <div class="stat-label">Inquiries</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1: ORDERS -->
+      <div id="tab-orders">
+        <div style="background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Address & GPS</th>
+                <th>Pieces Ordered</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Fulfillment Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr><td colspan="8" style="text-align:center;">Loading orders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: ON-SITE LIVE CHATS -->
+      <div id="tab-livechat" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Real-Time Customer On-Site Live Chats</h3>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-sm btn-gold" onclick="loadLiveChats()"><i class="fa-solid fa-rotate"></i> Refresh Chats</button>
+          </div>
+        </div>
+        <div id="liveChatsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+          <p>Loading live chat sessions...</p>
+        </div>
+      </div>
+
+      <!-- TAB 3: CLIENT INQUIRIES -->
+      <div id="tab-inquiries" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Client Inquiries & Concierge Requests</h3>
+          <span style="font-size: 0.85rem; color: #666;">Direct messages received from store visitors</span>
+        </div>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date / Time</th>
+                <th>Client Name</th>
+                <th>Contact</th>
+                <th>Inquiry Topic</th>
+                <th>Client Message</th>
+                <th>Status</th>
+                <th>Reply Action</th>
+              </tr>
+            </thead>
+            <tbody id="inquiriesTableBody">
+              <tr><td colspan="7" style="text-align:center;">Loading inquiries...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: PRODUCTS -->
+      <div id="tab-products" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Product Catalogue Management</h3>
+          <button class="btn btn-gold btn-sm" onclick="openNewProductModal()"><i class="fa-solid fa-plus"></i> Add New Luxury Piece</button>
+        </div>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Piece Title</th>
+                <th>Collection</th>
+                <th>Price (GHS)</th>
+                <th>Total Stock</th>
+                <th>Badge</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="7" style="text-align:center;">Loading products...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 5: INVENTORY -->
+      <div id="tab-inventory" style="display: none;">
+        <h3 style="margin-bottom: 15px;">Stock Level & Low-Stock Alerts</h3>
+        <div id="inventoryAlertsBanner" style="margin-bottom: 20px;"></div>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Piece</th>
+                <th>Size / Variant</th>
+                <th>SKU</th>
+                <th>Current Quantity</th>
+                <th>Alert Level</th>
+                <th>Adjust Stock</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <tr><td colspan="6" style="text-align:center;">Loading inventory...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 6: REPORTS -->
+      <div id="tab-reports" style="display: none;">
+        <h3 style="margin-bottom: 15px;">Sales & Inventory Performance Reports</h3>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);" id="reportContainer">
+          Loading analytics...
+        </div>
+      </div>
+
+      <!-- TAB 7: NOTIFICATIONS -->
+      <div id="tab-notifications" style="display: none;">
+        <h3 style="margin-bottom: 15px;">Email, SMS & Live Chat Dispatch Logs</h3>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Channel</th>
+                <th>Recipient</th>
+                <th>Message Content</th>
+                <th>Delivery Status</th>
+              </tr>
+            </thead>
+            <tbody id="notificationsTableBody">
+              <tr><td colspan="5" style="text-align:center;">Loading logs...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 8: BACKUP -->
+      <div id="tab-backup" style="display: none;">
+        <h3 style="margin-bottom: 15px;">Database Persistence & Backup Management</h3>
+        <div style="background:#fff; border-radius:var(--radius-md); padding:30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <p style="margin-bottom: 20px; color: #555;">Create verified point-in-time snapshots of the database stored safely in <code>Miss Roses Exquisite/backups/</code>.</p>
+          <button class="btn btn-gold btn-glow" onclick="triggerBackup()"><i class="fa-solid fa-floppy-disk"></i> Create Database Backup Now</button>
+          <div id="backupResult" style="margin-top: 25px;"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Product Edit/Create Modal -->
+  <div class="modal" id="adminProductModal">
+    <div class="modal-backdrop" onclick="closeAdminProductModal()"></div>
+    <div class="modal-dialog">
+      <button class="modal-close" onclick="closeAdminProductModal()">&times;</button>
+      <h3 id="adminModalTitle" style="font-family: var(--font-cinzel); font-size: 1.5rem; margin-bottom: 20px;">Add New Luxury Piece</h3>
+      <form id="adminProductForm" onsubmit="handleProductSave(event)">
+        <input type="hidden" id="editProdId">
+        <div class="form-group">
+          <label>Collection Category *</label>
+          <select id="editProdCategory" class="form-control" required>
+            <option value="1">Dresses</option>
+            <option value="2">Bangles</option>
+            <option value="3">Slippers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Piece Title *</label>
+          <input type="text" id="editProdName" class="form-control" required placeholder="e.g. Royal Gold Silk Gown">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label>Price (GHS) *</label>
+            <input type="number" step="0.01" id="editProdPrice" class="form-control" required placeholder="950.00">
+          </div>
+          <div class="form-group col-half">
+            <label>Compare Price (GHS)</label>
+            <input type="number" step="0.01" id="editProdComparePrice" class="form-control" placeholder="1100.00">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>High-Res Image URL *</label>
+          <input type="url" id="editProdImage" class="form-control" required placeholder="https://... or /product-images/...">
+        </div>
+        <div class="form-group">
+          <label>Detailed Description *</label>
+          <textarea id="editProdDesc" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Highlight Badge</label>
+          <input type="text" id="editProdBadge" class="form-control" placeholder="e.g. Best Seller, New Arrival, Handcrafted">
+        </div>
+        <button type="submit" class="btn btn-gold btn-block btn-glow"><i class="fa-solid fa-save"></i> Save Piece to Database</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
