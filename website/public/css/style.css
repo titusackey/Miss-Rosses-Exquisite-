@@ -26,6 +26,17 @@
   --font-cinzel: 'Cinzel', serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* -- Professional Typographic Scale -- */
+  --fs-xs:   0.82rem;
+  --fs-sm:   0.9rem;
+  --fs-base: 1rem;
+  --fs-md:   1.1rem;
+  --fs-lg:   1.35rem;
+  --fs-xl:   1.7rem;
+  --fs-2xl:  2.2rem;
+  --fs-3xl:  2.8rem;
+  --fs-4xl:  3.6rem;
+
 
   --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -49,10 +60,11 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
+  font-size: var(--fs-base);
   background-color: var(--bg-page);
   color: var(--text-primary);
-  line-height: 1.65;
+  line-height: 1.72;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -81,7 +93,7 @@ ul {
 .top-bar {
   background: var(--noir-deep);
   color: #d1d1d1;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 0.5px;
   padding: 9px 0;
   border-bottom: 1px solid rgba(212, 175, 55, 0.25);
@@ -99,7 +111,7 @@ ul {
   display: flex;
   align-items: center;
   gap: 15px;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
 }
 
 .social-point-link {
@@ -123,7 +135,7 @@ ul {
   border: none;
   color: #fff;
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -183,7 +195,7 @@ ul {
 
 .brand-title {
   font-family: var(--font-cinzel);
-  font-size: 1.85rem;
+  font-size: var(--fs-2xl);
   font-weight: 700;
   color: var(--noir-deep);
   letter-spacing: 1.5px;
@@ -191,7 +203,7 @@ ul {
 }
 
 .brand-subtitle {
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   letter-spacing: 5px;
   color: var(--gold-primary);
   font-weight: 700;
@@ -207,7 +219,7 @@ ul {
 .nav-link {
   font-size: 0.88rem;
   font-weight: 600;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   letter-spacing: 1.5px;
   color: var(--text-primary);
   position: relative;
@@ -215,7 +227,7 @@ ul {
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
 }
 
 .nav-link::after {
@@ -314,7 +326,7 @@ ul {
   background: var(--gold-primary);
   color: var(--noir-deep);
   font-weight: 800;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -365,16 +377,16 @@ ul {
   color: var(--champagne);
   padding: 6px 16px;
   border-radius: 30px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 2px;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
 .hero-title {
   font-family: var(--font-cinzel);
-  font-size: 3.8rem;
+  font-size: var(--fs-4xl);
   line-height: 1.15;
   margin-bottom: 22px;
   font-weight: 700;
@@ -382,7 +394,7 @@ ul {
 }
 
 .hero-desc {
-  font-size: 1.15rem;
+  font-size: var(--fs-base);
   line-height: 1.75;
   color: #e5e5e5;
   margin-bottom: 35px;
@@ -426,7 +438,7 @@ ul {
   border-radius: var(--radius-sm);
   font-size: 0.88rem;
   font-weight: 700;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   letter-spacing: 1.5px;
   cursor: pointer;
   border: 1px solid transparent;
@@ -485,7 +497,7 @@ ul {
 
 .btn-sm {
   padding: 8px 18px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .btn-block {
@@ -547,9 +559,9 @@ ul {
 
 .sub-title {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 4px;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   color: var(--gold-primary);
   font-weight: 700;
   margin-bottom: 8px;
@@ -557,7 +569,7 @@ ul {
 
 .main-title {
   font-family: var(--font-cinzel);
-  font-size: 2.8rem;
+  font-size: var(--fs-3xl);
   color: var(--noir-deep);
   font-weight: 700;
   line-height: 1.2;
@@ -584,7 +596,7 @@ ul {
 }
 
 .section-lead {
-  font-size: 1.05rem;
+  font-size: var(--fs-md);
   color: var(--text-secondary);
   max-width: 650px;
   margin: 0 auto;
@@ -664,7 +676,7 @@ ul {
   padding: 12px 40px 12px 42px;
   border: 1px solid var(--border-subtle);
   border-radius: 30px;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.9rem;
   outline: none;
   transition: var(--transition-smooth);
@@ -705,7 +717,7 @@ ul {
   border-radius: var(--radius-sm);
   background: #fff;
   outline: none;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.88rem;
   cursor: pointer;
 }
@@ -765,10 +777,10 @@ ul {
   left: 14px;
   background: var(--noir-deep);
   color: var(--gold-primary);
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   padding: 5px 12px;
   border-radius: 4px;
   border: 1px solid rgba(212, 175, 55, 0.3);
@@ -781,7 +793,7 @@ ul {
   background: rgba(12, 12, 12, 0.82);
   backdrop-filter: blur(4px);
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 20px;
@@ -795,7 +807,7 @@ ul {
 
 .video-indicator-badge i {
   color: var(--gold-primary);
-  font-size: 0.65rem;
+  font-size: 0.82rem;
 }
 
 .media-toggle-tabs {
@@ -837,7 +849,7 @@ ul {
   backdrop-filter: blur(4px);
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--noir-deep);
   display: flex;
@@ -857,8 +869,8 @@ ul {
 }
 
 .product-category-tag {
-  font-size: 0.75rem;
-  text-transform: uppercase;
+  font-size: 0.88rem;
+  font-variant: small-caps; text-transform: capitalize;
   letter-spacing: 2px;
   color: var(--gold-primary);
   font-weight: 700;
@@ -905,7 +917,7 @@ ul {
 }
 
 .stock-indicator {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -1041,7 +1053,7 @@ ul {
   margin-top: auto;
   font-size: 0.85rem;
   font-weight: 700;
-  text-transform: uppercase;
+  font-variant: small-caps; text-transform: capitalize;
   letter-spacing: 1px;
   color: var(--gold-primary);
   display: flex;
@@ -1093,7 +1105,7 @@ ul {
   transition: var(--transition-smooth);
   cursor: pointer;
   text-align: left;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
 }
 
 .channel-card:hover {
@@ -1183,7 +1195,7 @@ ul {
   padding: 14px 20px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.95rem;
   outline: none;
 }
@@ -1259,7 +1271,7 @@ ul {
 }
 
 .chat-status-dot {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: var(--champagne);
   display: flex;
   align-items: center;
@@ -1308,7 +1320,7 @@ ul {
 }
 
 .message-sender {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: #777;
   margin-bottom: 3px;
   font-weight: 600;
@@ -1341,7 +1353,7 @@ ul {
 }
 
 .message-time {
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   color: #999;
   margin-top: 3px;
 }
@@ -1365,7 +1377,7 @@ ul {
   border: 1px solid #e2ddd3;
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   cursor: pointer;
   transition: var(--transition-smooth);
 }
@@ -1391,7 +1403,7 @@ ul {
   padding: 10px 14px;
   border: 1px solid var(--border-subtle);
   border-radius: 25px;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.88rem;
   outline: none;
 }
@@ -1435,7 +1447,7 @@ ul {
   box-shadow: 0 6px 25px rgba(212, 175, 55, 0.45);
   z-index: 2400;
   transition: var(--transition-smooth);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-weight: 700;
   font-size: 0.88rem;
 }
@@ -1589,7 +1601,7 @@ ul {
 }
 
 .cart-item-variant {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
 }
 
@@ -1612,7 +1624,7 @@ ul {
 
 .cart-security-badge {
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   color: #777;
   margin-top: 12px;
 }
@@ -1635,7 +1647,7 @@ ul {
   padding: 12px 16px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.9rem;
   outline: none;
   transition: var(--transition-smooth);
@@ -1672,7 +1684,7 @@ ul {
 }
 
 .small-text {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   margin-top: 2px;
 }
@@ -1866,7 +1878,7 @@ ul {
     width: 100%;
   }
   .top-bar-right {
-    font-size: 0.74rem;
+    font-size: 0.88rem;
     gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
@@ -2009,7 +2021,7 @@ ul {
     font-size: 1.4rem;
   }
   .brand-subtitle {
-    font-size: 0.58rem;
+    font-size: 0.82rem;
     letter-spacing: 3px;
   }
   .brand-emblem {
@@ -2031,7 +2043,7 @@ ul {
   .product-badge {
     top: 8px;
     left: 8px;
-    font-size: 0.62rem;
+    font-size: 0.82rem;
     padding: 3px 7px;
   }
   .product-info {
@@ -2049,7 +2061,7 @@ ul {
     margin-bottom: 8px;
   }
   .product-rating {
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     margin-bottom: 6px;
   }
   .modal-dialog {
